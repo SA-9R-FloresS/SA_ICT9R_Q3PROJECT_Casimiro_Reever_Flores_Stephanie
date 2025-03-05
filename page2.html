@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- META ATTRIBUTES -->
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<title>Ticket Fare | CasiFlo Guides</title>
+
+	<!-- BS5 SETUP -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+	<!-- CSS SETUP -->
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+	<!-- JS SETUP -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+	<style>
+		h2 {
+			font-size: 2rem;
+			font-weight: bold;
+			text-shadow: 0px 3px 20px rgba(102, 71, 228, 0.75);
+		}
+
+		.form-select {
+			background: rgba(255, 255, 255, 0.15);
+			border: none;
+			font-size: 1.5rem;
+			font-weight: 500;
+			text-shadow: 0px 1px 5px rgb(255, 255, 255);
+			color: rgb(102, 71, 228);
+		}
+
+		img.img-fluid {
+			width: 100%; 
+			height: 350px;
+			object-fit: cover;
+		}
+
+		#map {
+			max-width: 100%;
+			min-height: auto;
+			border-radius: 10px;
+		}
+
+		#fareOutput {
+			font-size: 1.2rem;
+		}
+
+		.btn {
+			background-color: rgba(151, 125, 255, 0.75);
+			border-color: rgb(102, 71, 228);
+			font-weight: 500;
+			color: white;
+		}
+
+		.btn:hover {
+			background-color: rgba(151, 125, 255, 1) !important;
+			border-color: rgb(102, 71, 228);
+			color: white;
+		}
+
+		#fareOutput {
+			background: rgba(255, 255, 255, 0.15);
+			font-size: 3rem;
+		}
+		
+
+		@media (max-width: 768px) {
+			h2 {
+				font-size: 1.75rem;
+			}
+		}
+
+		@media (max-width: 576px) {
+			h2 {
+				font-size: 1.5rem;
+			}
+
+			.form-select {
+				font-size: 1.25rem;
+			}
+		}
+	</style>
+</head>
+<body>
+	<!-- NAVIGATION BAR -->
+	<nav class="navbar navbar-expand-lg">
+		<div class="container">
+			<a href="page2.html" class="navbar-brand">
+				<img src="ticket.svg" id="brand-img">
+				<span id="brand" class="ms-3 text-light fw-bold">Ticket Fare</span>
+			</a>
+			<button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar"> 
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="collapsibleNavbar">
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item">
+						<a href="page1.html" id="schedule">
+							<img src="schedule.svg" class="svg mx-5 my-lg-0 my-2">
+							<span class="p-1 px-2 rounded-pill text-dark tooltip">Train Schedule</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="index.html" id="ticket">
+							<img src="train.svg" class="svg mx-5 my-lg-0 my-2">
+							<span class="p-1 px-2 rounded-pill text-dark tooltip">CasiFlo Guides</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="page3.html" id="contact">
+							<img src="question.svg" class="svg mx-5 my-lg-0 my-2">
+							<span class="p-1 px-2 rounded-pill text-dark tooltip">Contact Us</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!-- TICKET FARE -->
+	<div class="container my-2 p-4 text-center animate__animated animate__fadeIn animate__slow">
+		<div class="row align-items-center">
+			<!-- LEFT / TOP — DEPARTURE -->
+			<div class="col-lg-4 col-6 order-1">
+				<h2>Departing from...</h2>
+
+				<select id="stationDeparture" class="form-select" onchange="changeImage(this, 'imgDeparture'); fareClear()">
+					<option value="0"></option>
+					<option value="N">North Avenue</option>
+					<option value="Q">Quezon Avenue</option>
+					<option value="GMA">GMA Kamuning</option>
+					<option value="AC">Araneta-Cubao</option>
+					<option value="SA">Santolan-Annapolis</option>
+					<option value="O">Ortigas</option>
+					<option value="S">Shaw Blvd.</option>
+					<option value="Bo">Boni Avenue</option>
+					<option value="G">Guadalupe</option>
+					<option value="Bu">Buendia</option>
+					<option value="A">Ayala</option>
+					<option value="M">Magallanes</option>
+					<option value="T">Taft Avenue</option>
+				</select>
+
+				<hr class="mb-4">
+				<img src="https://www.dotrmrt3.gov.ph/preview-1.jpg" id="imgDeparture" class="img-fluid rounded">
+			</div>
+
+			<!--  MIDDLE / BOTTOM — MAP -->
+			<div class="col-lg-4 m-lg-0 my-5 order-lg-2 order-3">
+				<iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d61777.708253001685!2d120.98737355190129!3d14.59299163829402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e6!4m5!1s0x3397b6fd9e5c2fb1%3A0x5e2929a93cd93f2d!2sNorth%20Avenue%2C%20Quezon%20City%2C%20Metro%20Manila!3m2!1d14.65217!2d121.032333!4m5!1s0x3397c945008b5cb5%3A0x23dd98e8b1d43815!2sTaft%20Avenue%2C%20Epifanio%20de%20los%20Santos%20Ave%2C%20Pasay%2C%201300%20Metro%20Manila!3m2!1d14.537669!2d121.0021747!5e0!3m2!1sen!2sph!4v1741165319850!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" id="map"></iframe>
+
+				<p id="fareOutput" class="rounded"></p>
+				<button class="btn ms-4 px-3" onclick="fareCalculate('regular')">Regular</button>
+				<button class="btn ms-4 px-3" onclick="fareCalculate('discount')">Discount</button>
+			</div>
+
+			<!-- RIGHT / TOP — DESTINATION -->
+			<div class="col-lg-4 col-6 order-lg-3 order-2">
+				<h2>Going to...</h2>
+				
+				<select id="stationDestination" class="form-select" onchange="changeImage(this, 'imgDestination'); fareClear()">
+					<option value="0"></option>
+					<option value="N">North Avenue</option>
+					<option value="Q">Quezon Avenue</option>
+					<option value="GMA">GMA Kamuning</option>
+					<option value="AC">Araneta-Cubao</option>
+					<option value="SA">Santolan-Annapolis</option>
+					<option value="O">Ortigas</option>
+					<option value="S">Shaw Blvd.</option>
+					<option value="Bo">Boni Avenue</option>
+					<option value="G">Guadalupe</option>
+					<option value="Bu">Buendia</option>
+					<option value="A">Ayala</option>
+					<option value="M">Magallanes</option>
+					<option value="T">Taft Avenue</option>
+				</select>
+
+				<hr class="mb-4">
+				<img src="https://www.dotrmrt3.gov.ph/preview-1.jpg" id="imgDestination" class="img-fluid rounded">
+			</div>
+		</div>
+	</div>
+
+	<p class="fst-italic text-center" style="opacity: 0.75;">&copy; 2025 Casimiro & Flores, S.</p>
+
+	<!-- JAVASCRIPT -->
+	<script>
+		function changeImage(select, imgId) {
+			const images = {
+				"0": "https://www.dotrmrt3.gov.ph/preview-1.jpg",
+				"N": "https://mystreetsph.wordpress.com/wp-content/uploads/2015/08/dsc_0501e.jpg?w=1600",
+				"Q": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/0061jfGuadalupe_Makati_Mandaluyong_Bridge_MRT-21_Station_Bridge_Quezon_Avenue_EDSAfvf.jpg/2560px-0061jfGuadalupe_Makati_Mandaluyong_Bridge_MRT-21_Station_Bridge_Quezon_Avenue_EDSAfvf.jpg",
+				"GMA": "https://pbs.twimg.com/media/EZ8SVltUcAENBNg.jpg:large",
+				"AC": "https://fastly.4sqi.net/img/general/600x600/8247640_ykV8cM7utJ2j41X2ZxV7vytX1D7iHtVpmj6vc3lsBl0.jpg",
+				"SA": "https://fastly.4sqi.net/img/general/600x600/5402621_iIm8jiWA2n8h0EvF5IUqh4kRGOeGfbv6AZoiC7GZ1n0.jpg",
+				"O": "https://fastly.4sqi.net/img/general/600x600/5402621_b14t9ZUmtIEjMhXJ9xuBVvQGjGNuE11fenm6PWAI9Fs.jpg",
+				"S": "https://preview.redd.it/hinga-muna-ng-malalim-behold-the-mighty-mt-shaw-v0-slcc7zl9u5db1.png?width=640&crop=smart&auto=webp&s=4bb4fc67fe07a1e392cc7e069f58c6ef6367f688",
+				"Bo": "https://s3-media0.fl.yelpcdn.com/bphoto/afMxiH0lcR8b1wl0V9s-bQ/348s.jpg",
+				"G": "https://upload.wikimedia.org/wikipedia/commons/5/50/92050jfGuadalupe_Makati_Mandaluyong_Bridge_MRT-25_segments_Bridge_EDSAfvf.jpg",
+				"Bu": "https://fastly.4sqi.net/img/general/600x600/19041286_eHza5VCqRRq1XwHAzgOguoYfoIAhP5R7mMVOGEqzZFg.jpg",
+				"A": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhiN84KyGtm7qGn7uP3nkWFEujU959tka9yQsnyTjVMVEd0BQfd0dgZUcuECxtb-eTERgP4fDKienyBfZBKoa-ea-QTrovq1ChWj0SPkdNLztXVwkUwRRr7oWt49eQ_YyLQom2O-9qwBjfNMsPxc3d_0iE8djnSfe00xjLv8zUQY-fta1JW01crtHAcNQ/s1024/ayala%20station%20leds%2004.jpg",
+				"M": "https://fastly.4sqi.net/img/general/600x600/5402621_l-oMjYLhHzaeqyJCKZ2jK9bDhob0ps7pYd7BDV9h6tY.jpg",
+				"T": "https://media.philstar.com/photos/2023/12/25/m07032023_2023-12-25_20-23-29.jpg"
+			};
+
+			document.getElementById(imgId).src = images[select.value];
+		}
+
+		function fareCalculate(type) {
+			var departure = document.getElementById('stationDeparture').value;
+			var destination = document.getElementById('stationDestination').value;
+			var fareFinal;
+
+			const fareAll = {
+				N: {Q: 13, GMA: 13, AC: 16, SA: 16, O: 20, S: 20, Bo: 20, G: 24, Bu: 24, A: 24, M: 28, T: 28},
+				Q: {GMA: 13, AC: 13, SA: 16, O: 16, S: 20, Bo: 20, G: 20, Bu: 24, A: 24, M: 24, T: 28},
+				GMA: {AC: 13, SA: 13, O: 16, S: 16, Bo: 20, G: 20, Bu: 20, A: 24, M: 24, T: 24},
+				AC: {SA: 13, O: 13, S: 16, Bo: 16, G: 20, Bu: 20, A: 20, M: 24, T: 24},
+				SA: {O: 13, S: 16, Bo: 16, G: 16, Bu: 20, A: 20, M: 20, T: 24},
+				O: {S: 13, Bo: 13, G: 16, Bu: 16, A: 20, M: 20, T: 20},
+				S: {Bo: 13, G: 13, Bu: 16, A: 16, M: 20, T: 20},
+				Bo: {G: 13, Bu: 13, A: 16, M: 16, T: 20},
+				G: {Bu: 13, A: 13, M: 16, T: 16},
+				Bu: {A: 13, M: 13, T: 16},
+				A: {M: 13, T: 13},
+				M: {T: 13}
+    		}
+
+			if (departure === "0" || destination === "0") {
+				window.alert("You can't be going nowhere, please pick an origin or destination to continue!");
+				return;
+			}
+
+			if (departure === destination) {
+				window.alert("What? Pick two different stops, please.");
+				return;
+			}
+
+			if (fareAll[departure] && fareAll[departure][destination]) {
+				fareFinal = fareAll[departure][destination];
+			} else if (fareAll[destination] && fareAll[destination][departure]) {
+				fareFinal = fareAll[destination][departure];
+			}
+
+			if (type === 'regular') {
+				document.getElementById('fareOutput').innerHTML = "₱" + fareFinal;
+			} else {
+				fareFinal = fareFinal * 0.8;
+				document.getElementById('fareOutput').innerHTML = "₱" + fareFinal.toFixed(2);
+			}
+		}
+
+		function fareClear() {
+			document.getElementById('fareOutput').innerHTML = "";
+		}
+	</script>
+</body>
+</html>
